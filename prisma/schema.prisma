@@ -21,13 +21,14 @@ enum Scope {
 enum GrantType {
   authorization_code
   refresh_token
+  password
 }
 
 model User {
   id       String @id @default(auto()) @map("_id") @db.ObjectId
   username String @unique
   email    String @unique
-  password String
+  password String?
   
   authorizationCodes AuthorizationCode[]
   tokens   Token[]
@@ -38,7 +39,7 @@ model User {
 model Client {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
-  secret String // @encrypted
+  secret String
   redirectUris String[]
   grants      GrantType[] @default([authorization_code, refresh_token])
   createdAt DateTime @default(now())
@@ -51,7 +52,7 @@ model Client {
 model Token {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   accessToken  String
-  scope        Scope[] @default([identify])
+  scope        Scope[]
 
   createdAt DateTime @default(now())
   expiresAt DateTime
@@ -68,7 +69,7 @@ model RefreshToken {
   id           String @id @default(auto()) @map("_id") @db.ObjectId
   refreshToken  String
 
-  scope        Scope[] @default([identify])
+  scope        Scope[]
 
   createdAt DateTime @default(now())
   expiresAt DateTime
@@ -84,7 +85,7 @@ model AuthorizationCode {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   code      String   @unique
   redirectUri String
-  scope     Scope[] @default([identify])
+  scope     Scope[]
   state     String?
 
   createdAt DateTime @default(now())

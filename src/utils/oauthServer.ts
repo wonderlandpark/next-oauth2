@@ -7,6 +7,7 @@ const oauth = new OAuth2Server({
   model: Model,
   accessTokenLifetime: TOKEN_EXPIRES_AT,
   allowBearerTokensInQueryString: true,
+
 })
 
 export default oauth
